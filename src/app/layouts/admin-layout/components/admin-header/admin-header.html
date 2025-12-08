@@ -1,47 +1,72 @@
-<header class="h-16 bg-card border-b border-border flex items-center justify-between px-6">
-  <!-- Left: Toggle + Search -->
-  <div class="flex items-center gap-4">
-    <button
-      (click)="onToggleSidebar()"
-      class="inline-flex items-center justify-center h-10 w-10 rounded-md hover:bg-muted"
-      aria-label="Toggle sidebar"
-    >
-      <svg *ngIf="!collapsed()" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-      </svg>
-      <svg *ngIf="collapsed()" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-      </svg>
-    </button>
-
-    <div class="relative">
-      <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/></svg>
-      <input
-        [(ngModel)]="search"
-        type="search"
-        placeholder="Buscar documentos, expedientes..."
-        class="pl-10 pr-3 py-2 rounded-md bg-secondary border-0 focus:outline-none focus:ring-1"
-      />
-    </div>
-  </div>
-
-  <!-- Right: Actions -->
-  <div class="flex items-center gap-4">
-    <!-- Notifications -->
-    <div class="relative">
-      <button class="h-10 w-10 rounded-md hover:bg-muted inline-flex items-center justify-center">
-        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h11z"/></svg>
-      </button>
-      <span class="absolute -top-1 -right-1 inline-flex items-center justify-center h-5 w-5 rounded-full text-[10px] bg-destructive text-white">3</span>
-    </div>
-
-    <!-- User -->
-    <div class="flex items-center gap-3">
-      <div class="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-medium">AG</div>
-      <div class="flex flex-col items-start text-left">
-        <span class="text-sm font-medium">Admin General</span>
-        <span class="text-xs text-muted-foreground">Administrador</span>
-      </div>
-    </div>
-  </div>
+<header class="sticky top-0 z-40 h-16 border-b bg-background/70 backdrop-blur-md shadow-sm
+    dark:bg-background/60 flex items-center justify-between px-6">
+	<!-- Search -->
+	<div class="flex-1 max-w-md">
+		<div class="relative">
+			<span class="material-symbols-rounded absolute left-3 top-1/2 -translate-y-1/2 
+        text-muted-foreground icon-sm" aria-hidden="true"> search </span>
+			<input type="search" placeholder="Buscar documentos, expedientes..." class="w-full h-10 pl-10 rounded-md bg-secondary text-sm
+          border border-border/50 focus:border-primary focus:ring-1
+          focus:ring-primary transition-colors" aria-label="Buscar" />
+		</div>
+	</div>
+	<!-- Actions -->
+	<div class="flex items-center gap-4">
+		<!-- Notifications -->
+		<div class="relative">
+			<button #notifTrigger type="button" (click)="toggleNotif()" aria-label="Notificaciones" class="h-10 w-10 rounded-full flex items-center justify-center 
+          hover:bg-muted transition-colors relative">
+				<span class="material-symbols-rounded icon-md">notifications</span>
+				<span class="absolute -top-1 -right-1 h-5 w-5 rounded-full 
+          flex items-center justify-center text-[10px] 
+          bg-destructive text-white">
+					{{ notifications.length }}
+				</span>
+			</button>
+			<!-- Dropdown -->
+			<div #notifMenu *ngIf="notifOpen" class="absolute right-0 mt-2 w-80 bg-card border border-border 
+          rounded-md shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2">
+				<div class="px-4 py-2 font-semibold">Notificaciones</div>
+				<div class="border-t border-border"></div>
+				<div class="max-h-64 overflow-auto scrollbar-thin">
+					<div *ngFor="let n of notifications" tabindex="0" class="px-4 py-3 flex flex-col gap-1 cursor-pointer 
+              hover:bg-muted transition-colors">
+						<span class="font-medium text-sm">{{ n.title }}</span>
+						<span class="text-xs text-muted-foreground">{{ n.body }}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- User Menu -->
+		<div class="relative">
+			<button #userTrigger type="button" (click)="toggleUser()" aria-label="Mi cuenta" class="flex items-center gap-2 px-2 h-10 rounded-md hover:bg-muted 
+          transition-colors">
+				<div class="h-8 w-8 rounded-full bg-primary text-white flex items-center 
+            justify-center text-sm font-medium">
+					{{ user.initials }}
+				</div>
+				<div class="hidden md:flex flex-col items-start">
+					<span class="text-sm font-medium">{{ user.name }}</span>
+					<span class="text-xs text-muted-foreground">{{ user.role }}</span>
+				</div>
+				<span class="material-symbols-rounded icon-sm">expand_more</span>
+			</button>
+			<div #userMenu *ngIf="userOpen" class="absolute right-0 mt-2 w-56 bg-card border border-border 
+          rounded-md shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2">
+				<div class="px-4 py-2 font-semibold">Mi Cuenta</div>
+				<div class="border-t border-border"></div>
+				<button (click)="goToProfile()" class="w-full flex items-center gap-2 px-4 py-2 hover:bg-muted 
+            transition-colors text-left">
+					<span class="material-symbols-rounded icon-sm">person</span> Perfil </button>
+				<button class="w-full flex items-center gap-2 px-4 py-2 hover:bg-muted 
+            transition-colors text-left">
+					<span class="material-symbols-rounded icon-sm">settings</span> Preferencias </button>
+				<div class="border-t border-border"></div>
+				<button (click)="logout()" class="w-full flex items-center gap-2 px-4 py-2 text-destructive 
+            hover:bg-muted transition-colors text-left">
+					<span class="material-symbols-rounded icon-sm">logout</span> Cerrar Sesión </button>
+			</div>
+		</div>
+	</div>
 </header>
+

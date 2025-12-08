@@ -1,0 +1,11 @@
+/* Si usas Tailwind, este archivo puede quedar casi vacío.
+   Aquí colocamos estilos mínimos que no sean de Tailwind. */
+
+:host {
+  display: block;
+}
+
+/* Scrollbar fino para el sidebar (puede no aplicarse a todos los navegadores) */
+.sidebar-scroll {
+  scrollbar-width: thin;
+}

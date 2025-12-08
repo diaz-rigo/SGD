@@ -1,0 +1,8 @@
+header {
+  /* si Tailwind está presente, la mayoría del estilo viene desde las clases del template */
+}
+
+/* Pequeños ajustes para el input */
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}

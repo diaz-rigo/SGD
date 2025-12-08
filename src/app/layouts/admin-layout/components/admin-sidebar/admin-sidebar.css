@@ -1,0 +1,17 @@
+/* Clases utilitarias pequeñas que complementan Tailwind */
+
+/* Evita que el contenido del aside afecte al layout cuando está colapsado */
+aside.w-16 {
+  min-width: 4rem;
+  max-width: 4rem;
+}
+
+/* Transition para ancho */
+aside {
+  transition: width 0.25s ease;
+}
+
+/* Scrollbar fino (Firefox) */
+.sidebar-scroll {
+  scrollbar-width: thin;
+}

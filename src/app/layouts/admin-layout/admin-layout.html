@@ -1,0 +1,11 @@
+<div class="flex h-screen overflow-hidden bg-background">
+  <app-admin-sidebar></app-admin-sidebar>
+
+  <div class="flex flex-col flex-1 overflow-hidden">
+    <app-admin-header></app-admin-header>
+
+    <main class="flex-1 overflow-y-auto bg-surface-sunken p-6">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

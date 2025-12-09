@@ -1,20 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-export interface MockDocument {
-  id: number;
-  nombre: string;
-  expediente: string;
-  fechaCreacion: string;
-  estado: 'indexed' | 'pending' | 'error';
+
+interface StatCard {
+  title: string;
+  value: string;
+  change: string;
+  changeType: 'positive' | 'neutral' | 'negative';
+  icon: string; // Material icon name
 }
 
-// Datos de prueba
-export const mockDocumentsData: MockDocument[] = [
-  { id: 1, nombre: 'Contrato', expediente: 'CNT-1', fechaCreacion: '2024-08-01', estado: 'indexed' },
-  { id: 2, nombre: 'Licencia', expediente: 'LIC-1', fechaCreacion: '2024-08-02', estado: 'pending' },
-  { id: 3, nombre: 'Factura', expediente: 'FAC-22', fechaCreacion: '2024-08-03', estado: 'error' }
-];
+
 
 @Component({
   selector: 'app-dashboard',
@@ -23,40 +19,89 @@ export const mockDocumentsData: MockDocument[] = [
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })
-export class Dashboard implements OnInit {
-
-  // 🔥 Ahora el arreglo tiene un nombre distinto y TS no se confunde
-  private _docs = mockDocumentsData;
-
-  // 🔥 Getter que *SIEMPRE* devuelve un array tipado
-  get documents(): MockDocument[] {
-    return [...this._docs]; // copia segura
-  }
-
+export class Dashboard {
   pendingDocs = 0;
   errorDocs = 0;
 
-  constructor() {}
+  stats: StatCard[] = [
+    {
+      title: 'Total Documentos',
+      value: '32,456',
+      change: '+12%',
+      changeType: 'positive',
+      icon: 'description',
+    },
+    {
+      title: 'Expedientes Activos',
+      value: '30,892',
+      change: '+5%',
+      changeType: 'positive',
+      icon: 'folder_open',
+    },
+    {
+      title: 'Usuarios Activos',
+      value: '24',
+      change: '+2',
+      changeType: 'positive',
+      icon: 'group',
+    },
+    {
+      title: 'Almacenamiento',
+      value: '4.2 TB',
+      change: '52%',
+      changeType: 'neutral',
+      icon: 'hard_drive',
+    },
+  ];
 
-  ngOnInit(): void {
-    this.calculateCounts();
-  }
+  recentActivity = [
+    { action: 'Documento indexado', document: 'Contrato CNT-2024-089', time: 'Hace 5 min', status: 'success' },
+    { action: 'Usuario creado', document: 'operador2@stch.gob.mx', time: 'Hace 15 min', status: 'success' },
+    { action: 'Error de indexación', document: 'Licencia LIC-2024-045', time: 'Hace 30 min', status: 'error' },
+    { action: 'Respaldo completado', document: 'Backup diario', time: 'Hace 1 hora', status: 'success' },
+    { action: 'Documento descargado', document: 'Expediente EXP-2024-001', time: 'Hace 2 horas', status: 'success' },
+  ];
+  documents = [
+    {
+      id: 1,
+      nombre: 'Contrato CNT-2024-089',
+      expediente: 'CNT-2024-089',
+      fechaCreacion: '2024-01-12',
+      estado: 'indexed'
+    },
+    {
+      id: 2,
+      nombre: 'Usuario creado',
+      expediente: 'operador2@stch.gob.mx',
+      fechaCreacion: '2024-01-12',
+      estado: 'indexed'
+    },
+    {
+      id: 3,
+      nombre: 'Licencia LIC-2024-045',
+      expediente: 'LIC-2024-045',
+      fechaCreacion: '2024-01-12',
+      estado: 'error'
+    },
+    {
+      id: 4,
+      nombre: 'Backup diario',
+      expediente: 'Respaldo',
+      fechaCreacion: 'Hace 1 hora',
+      estado: 'indexed'
+    },
+    {
+      id: 5,
+      nombre: 'Expediente EXP-2024-001',
+      expediente: 'EXP-2024-001',
+      fechaCreacion: 'Hace 2 horas',
+      estado: 'indexed'
+    }
+  ];
 
-  private calculateCounts(): void {
-    // // 🔥 Como `documents` SIEMPRE es un arreglo, filter SIEMPRE existe
-    // this.pendingDocs = this.documents.filter(d => d.estado === 'pending').length;
-    // this.errorDocs  = this.documents.filter(d => d.estado === 'error').length;
-  }
-
-  statusLabel(estado: MockDocument['estado']): string {
+  getEstadoTexto(estado: string) {
     if (estado === 'indexed') return 'Indexado';
     if (estado === 'pending') return 'Pendiente';
     return 'Error';
-  }
-
-  statusBadgeClasses(estado: MockDocument['estado']): string {
-    if (estado === 'indexed') return 'border-success text-success';
-    if (estado === 'pending') return 'border-warning text-warning';
-    return 'border-destructive text-destructive';
   }
 }

@@ -35,6 +35,24 @@ export const routes: Routes = [
         loadComponent: () => import('./features/admin/dashboard/dashboard').then(m => m.Dashboard)
       },
       
+      {
+        path: 'documentos',
+        title: 'Admin - Panel',
+        loadComponent: () => import('./features/admin/documents/documents').then(m => m.Documents)
+      },
+      
+      {
+        path: 'busqueda',
+        title: 'Admin - Panel',
+        loadComponent: () => import('./features/admin/search/search').then(m => m.SearchComponent)
+      },
+      
+      {
+        path: 'explorador',
+        title: 'Admin - Panel',
+        loadComponent: () => import('./features/admin/explorer/explorer').then(m => m.Explorer)
+      },
+      
   
     ]
   },

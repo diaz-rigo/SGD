@@ -1,22 +1,20 @@
 <aside
   [ngClass]="{
-    'flex flex-col h-screen border-r transition-all duration-300': true,
+    'flex flex-col h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300': true,
     'w-16': collapsed,
-    'w-64': !collapsed,
-    'bg-sidebar dark:bg-slate-900': true,
-    'border-sidebar-border dark:border-slate-700': true
+    'w-64': !collapsed
   }"
 >
   <!-- Header -->
-  <div class="flex items-center justify-between h-16 px-4 border-b border-sidebar-border dark:border-slate-700">
+  <div class="flex items-center justify-between h-16 px-4 border-b border-sidebar-border">
     <ng-container *ngIf="!collapsed">
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
           <span class="text-primary-foreground font-bold text-sm">ST</span>
         </div>
         <div class="flex flex-col">
-          <span class="text-sm font-semibold text-sidebar-foreground dark:text-slate-100">STCH</span>
-          <span class="text-[10px] text-muted-foreground dark:text-slate-400">Gestión Documental</span>
+          <span class="text-sm font-semibold text-sidebar-foreground">STCH</span>
+          <span class="text-[10px] text-muted-foreground">Gestión Documental</span>
         </div>
       </div>
     </ng-container>
@@ -25,7 +23,7 @@
     <button
       type="button"
       (click)="toggle()"
-      class="h-8 w-8 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground transition dark:text-slate-300"
+      class="h-8 w-8 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground transition"
     >
       <span class="material-symbols-rounded text-xl">
         {{ collapsed ? 'chevron_right' : 'chevron_left' }}
@@ -40,8 +38,8 @@
       [routerLink]="item.path"
       class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors"
       [ngClass]="{
-        'bg-sidebar-accent text-sidebar-accent-foreground dark:bg-slate-700 dark:text-white': isActive(item.path),
-        'text-sidebar-foreground hover:bg-sidebar-accent/50 dark:text-slate-300 dark:hover:bg-slate-800': !isActive(item.path)
+        'bg-sidebar-accent text-sidebar-accent-foreground': isActive(item.path),
+        'text-sidebar-foreground hover:bg-sidebar-accent/50': !isActive(item.path)
       }"
     >
       <span class="material-symbols-rounded text-lg flex-shrink-0">
@@ -53,12 +51,12 @@
   </nav>
 
   <!-- Footer -->
-  <div class="p-4 border-t border-sidebar-border dark:border-slate-700">
+  <div class="p-4 border-t border-sidebar-border">
     <ng-container *ngIf="!collapsed">
-      <div class="text-xs text-muted-foreground text-center dark:text-slate-400">
+      <div class="text-xs text-muted-foreground text-center">
         <p>Sistema de Transporte</p>
         <p>Convencional de Hidalgo</p>
-        <div class="my-2 border-t border-sidebar-border dark:border-slate-700"></div>
+        <div class="my-2 border-t border-sidebar-border"></div>
         <p class="text-[10px]">v1.0.0 © 2024</p>
       </div>
     </ng-container>

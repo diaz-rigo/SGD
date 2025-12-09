@@ -1,9 +1,168 @@
+<div class="space-y-6 motion-safe:animate-fade-in">
 
-<div class="space-y-6 animate-fade-in">
-  <!-- Header -->
+  <!-- HEADER -->
   <div>
-    <h1 class="text-2xl font-bold text-foreground">Dashboard</h1>
-    <p class="text-muted-foreground">Sistema de Gestión Documental - Sistema de Transporte Convencional de Hidalgo</p>
+    <h1 class="text-2xl font-bold text-foreground dark:text-slate-100">Dashboard</h1>
+    <p class="text-muted-foreground dark:text-slate-400">
+      Sistema de Gestión Documental - Sistema de Transporte Convencional de Hidalgo
+    </p>
   </div>
 
+  <!-- STATS GRID -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div
+      *ngFor="let stat of stats"
+      class="rounded-lg border bg-card text-card-foreground shadow-sm p-6
+             dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100"
+    >
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-muted-foreground dark:text-slate-400">
+            {{ stat.title }}
+          </p>
+
+          <p class="text-2xl font-bold mt-1 dark:text-white">
+            {{ stat.value }}
+          </p>
+
+          <div class="flex items-center gap-1 mt-1">
+            <span
+              class="material-symbols-rounded text-sm"
+              [ngClass]="{
+                'text-green-600 dark:text-green-400': stat.changeType === 'positive',
+                'text-yellow-600 dark:text-yellow-400': stat.changeType === 'neutral',
+                'text-red-600 dark:text-red-400': stat.changeType === 'negative'
+              }"
+            >
+              trending_up
+            </span>
+
+            <span
+              class="text-xs font-medium"
+              [ngClass]="{
+                'text-green-700 dark:text-green-300': stat.changeType === 'positive',
+                'text-yellow-700 dark:text-yellow-300': stat.changeType === 'neutral',
+                'text-red-700 dark:text-red-300': stat.changeType === 'negative'
+              }"
+            >
+              {{ stat.change }}
+            </span>
+          </div>
+        </div>
+
+        <div class="h-12 w-12 rounded-lg bg-secondary flex items-center justify-center dark:bg-slate-700">
+          <span class="material-symbols-rounded text-muted-foreground text-3xl dark:text-slate-300">
+            {{ stat.icon }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOCUMENTOS RECIENTES -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 rounded-lg border bg-card text-card-foreground shadow-sm border-border dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100">
+      <div class="flex flex-col space-y-1.5 p-6">
+        <h3 class="text-lg font-semibold leading-none tracking-tight dark:text-white">Documentos Recientes</h3>
+        <p class="text-sm text-muted-foreground dark:text-slate-400">Últimos documentos procesados en el sistema</p>
+      </div>
+
+      <div class="p-6 pt-0">
+        <div class="space-y-4">
+          <div
+            *ngFor="let doc of documents"
+            class="flex items-center justify-between p-3 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors dark:bg-slate-800/70 dark:hover:bg-slate-800"
+          >
+            <div class="flex items-center gap-3">
+              <div class="h-10 w-10 rounded-lg bg-card flex items-center justify-center border border-border dark:bg-slate-700 dark:border-slate-600">
+                <span class="material-symbols-rounded text-muted-foreground dark:text-slate-300">description</span>
+              </div>
+
+              <div>
+                <p class="font-medium text-sm dark:text-white">{{ doc.nombre }}</p>
+                <p class="text-xs text-muted-foreground dark:text-slate-400">{{ doc.expediente }} • {{ doc.fechaCreacion }}</p>
+              </div>
+            </div>
+
+            <!-- BADGE: explícito para claro/oscuro -->
+            <span
+              class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold"
+              [ngClass]="{
+                'border-green-600 bg-green-50 text-green-800 dark:border-green-400 dark:bg-green-900/10 dark:text-green-300': doc.estado === 'indexed',
+                'border-yellow-600 bg-yellow-50 text-yellow-800 dark:border-yellow-400 dark:bg-yellow-900/10 dark:text-yellow-300': doc.estado === 'pending',
+                'border-red-600 bg-red-50 text-red-800 dark:border-red-400 dark:bg-red-900/10 dark:text-red-300': doc.estado === 'error'
+              }"
+            >
+              {{ getEstadoTexto(doc.estado) }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="space-y-6">
+      <!-- ESTADO DEL SISTEMA -->
+      <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-border dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100">
+        <div class="p-6">
+          <h3 class="text-lg font-semibold">Estado del Sistema</h3>
+        </div>
+
+        <div class="p-6 pt-0 space-y-4">
+          <div class="flex items-center justify-between p-3 rounded-lg bg-green-50 dark:bg-green-900/20">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-rounded text-green-600 dark:text-green-300 h-5 w-5">check_circle</span>
+              <span class="text-sm font-medium">Documentos Indexados</span>
+            </div>
+            <span class="font-bold">{{ documents.length - pendingDocs - errorDocs }}</span>
+          </div>
+
+          <div class="flex items-center justify-between p-3 rounded-lg bg-yellow-50 dark:bg-yellow-900/20">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-rounded text-yellow-600 dark:text-yellow-300 h-5 w-5">schedule</span>
+              <span class="text-sm font-medium">Pendientes</span>
+            </div>
+            <span class="font-bold">{{ pendingDocs }}</span>
+          </div>
+
+          <div class="flex items-center justify-between p-3 rounded-lg bg-red-50 dark:bg-red-900/20">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-rounded text-red-600 dark:text-red-300 h-5 w-5">error</span>
+              <span class="text-sm font-medium">Con Errores</span>
+            </div>
+            <span class="font-bold">{{ errorDocs }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVIDAD RECIENTE -->
+      <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-border dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100">
+        <div class="p-6">
+          <h3 class="text-lg font-semibold">Actividad Reciente</h3>
+        </div>
+
+        <div class="p-6 pt-0 space-y-3">
+          <div *ngFor="let activity of recentActivity; let i = index">
+            <div class="flex items-start gap-3">
+              <div class="h-2 w-2 rounded-full mt-2"
+                [ngClass]="{
+                  'bg-green-600 dark:bg-green-400': activity.status === 'success',
+                  'bg-red-600 dark:bg-red-400': activity.status === 'error'
+                }"
+              ></div>
+
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium">{{ activity.action }}</p>
+                <p class="text-xs text-muted-foreground truncate dark:text-slate-400">{{ activity.document }}</p>
+                <p class="text-xs text-muted-foreground dark:text-slate-500">{{ activity.time }}</p>
+              </div>
+            </div>
+
+            <div *ngIf="i < recentActivity.length - 1" class="border-t border-border my-3 dark:border-slate-700"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>

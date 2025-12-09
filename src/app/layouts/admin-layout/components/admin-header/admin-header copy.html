@@ -1,0 +1,99 @@
+<header class="sticky top-0 z-40 h-16 border-b bg-white/70 dark:bg-slate-900/60 backdrop-blur-md shadow-sm flex items-center justify-between px-4 md:px-6">
+  <!-- Search -->
+  <div class="flex-1 max-w-2xl">
+    <form (submit)="$event.preventDefault()" class="relative">
+      <span class="material-symbols-rounded absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-300 pointer-events-none">
+        search
+      </span>
+
+      <input
+        type="search"
+        [(ngModel)]="query"
+        name="globalSearch"
+        placeholder="Buscar documentos, expedientes, folios..."
+        aria-label="Buscar"
+        class="w-full h-11 pl-12 pr-4 rounded-xl bg-slate-50 dark:bg-slate-800 text-sm border border-slate-200 dark:border-slate-700 shadow-sm
+               focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus:border-primary transition-colors placeholder:text-slate-400 dark:placeholder:text-slate-400"
+      />
+
+      <!-- micro action / clear -->
+      <button *ngIf="query" type="button" (click)="clearSearch()" aria-label="Limpiar búsqueda"
+        class="absolute right-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center transition-colors">
+        <span class="material-symbols-rounded text-slate-600 dark:text-slate-300">close</span>
+      </button>
+    </form>
+  </div>
+
+  <!-- Actions -->
+  <div class="flex items-center gap-3 md:gap-4">
+    <!-- Theme toggle -->
+    <div class="flex items-center gap-2">
+      <button type="button" (click)="toggleTheme()" aria-label="Cambiar tema" title="Cambiar tema"
+        class="h-10 w-10 rounded-lg flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+        <ng-container *ngIf="isDark; else sun">
+          <span class="material-symbols-rounded">dark_mode</span>
+        </ng-container>
+        <ng-template #sun>
+          <span class="material-symbols-rounded">light_mode</span>
+        </ng-template>
+      </button>
+      <!-- label pequeño -->
+      <div class="hidden sm:flex flex-col text-right">
+        <span class="text-xs font-medium">{{ isDark ? 'Noche' : 'Día' }}</span>
+        <span class="text-[11px] text-slate-500 dark:text-slate-400">Tema activo</span>
+      </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="relative">
+      <button #notifTrigger type="button" (click)="toggleNotif()" aria-label="Notificaciones"
+        class="h-10 w-10 rounded-full flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors relative">
+        <span class="material-symbols-rounded icon-md">notifications</span>
+        <span *ngIf="notifications.length" class="absolute -top-1 -right-1 h-5 min-w-[18px] px-[3px] rounded-full flex items-center justify-center text-[10px] bg-rose-600 text-white">
+          {{ notifications.length }}
+        </span>
+      </button>
+
+      <div #notifMenu *ngIf="notifOpen" class="absolute right-0 mt-2 w-80 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2">
+        <div class="px-4 py-2 font-semibold">Notificaciones</div>
+        <div class="border-t border-slate-100 dark:border-slate-700"></div>
+        <div class="max-h-64 overflow-auto">
+          <div *ngFor="let n of notifications" tabindex="0" class="px-4 py-3 flex flex-col gap-1 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+            <span class="font-medium text-sm">{{ n.title }}</span>
+            <span class="text-xs text-slate-500 dark:text-slate-400">{{ n.body }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Menu -->
+    <div class="relative">
+      <button #userTrigger type="button" (click)="toggleUser()" aria-label="Mi cuenta"
+        class="flex items-center gap-3 px-2 h-10 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+        <div class="h-8 w-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-medium">
+          {{ user.initials }}
+        </div>
+        <div class="hidden md:flex flex-col items-start">
+          <span class="text-sm font-medium">{{ user.name }}</span>
+          <span class="text-xs text-slate-500 dark:text-slate-400">{{ user.role }}</span>
+        </div>
+        <span class="material-symbols-rounded icon-sm ml-1">expand_more</span>
+      </button>
+
+      <div #userMenu *ngIf="userOpen" class="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl z-50 overflow-hidden">
+        <div class="px-4 py-2 font-semibold">Mi Cuenta</div>
+        <div class="border-t border-slate-100 dark:border-slate-700"></div>
+        <button (click)="goToProfile()" class="w-full flex items-center gap-2 px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors text-left">
+          <span class="material-symbols-rounded icon-sm">person</span> Perfil
+        </button>
+        <button class="w-full flex items-center gap-2 px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors text-left">
+          <span class="material-symbols-rounded icon-sm">settings</span> Preferencias
+        </button>
+        <div class="border-t border-slate-100 dark:border-slate-700"></div>
+        <button (click)="logout()" class="w-full flex items-center gap-2 px-4 py-2 text-rose-600 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors text-left">
+          <span class="material-symbols-rounded icon-sm">logout</span> Cerrar Sesión
+        </button>
+      </div>
+    </div>
+  </div>
+</header>

@@ -20,11 +20,11 @@ export class AdminSidebar {
 
   navItems: NavItem[] = [
     { icon: 'space_dashboard', label: 'Dashboard', path: '/admin/dashboard' },
-    { icon: 'search', label: 'Búsqueda', path: '/busqueda' },
-    { icon: 'folder_open', label: 'Explorador', path: '/explorador' },
-    { icon: 'description', label: 'Documentos', path: '/documentos' },
+    { icon: 'search', label: 'Búsqueda', path: '/admin/busqueda' },
+    { icon: 'folder_open', label: 'Explorador', path: '/admin/explorador' },
+    { icon: 'description', label: 'Documentos', path: '/admin/documentos' },
     { icon: 'group', label: 'Usuarios', path: '/usuarios' },
-    { icon: 'database', label: 'Base de Datos', path: '/database' },
+    // { icon: 'database', label: 'Base de Datos', path: '/database' },
     { icon: 'settings', label: 'Configuración', path: '/configuracion' },
   ];
 
